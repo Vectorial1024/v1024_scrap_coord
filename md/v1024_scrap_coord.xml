@@ -14,7 +14,7 @@
         </cue>
         <cue name="SDC_TheLoop" checkinterval="1min" instantiate="true">
             <actions>
-                <show_help position="1" duration="3s" custom="'V1024 SDC: Pulse %s'.[global.$v1024_procReservationTable]" />
+                <show_help position="1" duration="3s" custom="'V1024 SDC: Pulse %s'.[global.$v1024_procReservationTable]" chance="0" />
                 <!-- The setup cue always run before this update cue -->
                 <!-- Decrement the reservation counters and clean things up -->
                 <do_for_each name="$pendingProcessor" in="global.$v1024_procReservationTable" reverse="true">
