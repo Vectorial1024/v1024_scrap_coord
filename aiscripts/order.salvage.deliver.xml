@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<diff>
+    <!-- When a tug is about to deliver a scrap piece, it reserves the specific processing module for about 2-3 minutes. -->
+    <replace sel="/aiscript/attention/actions/set_value[@exact='@$destination.processingmodules.random'][@name='$processingmodule']">
+        <set_value name="$listProcessors" exact="$destination.processingmodules.clone" />
+        <shuffle_list list="$listProcessors" />
+        <!-- 
+            One of the following will happen:
+            We selected a non-reserved processor, which hopefully means we can successfully deliver the scrap piece;
+            No reserved processors available, which usually indicates all processors are likely busy (need to recheck a while later)
+        -->
+        <set_value name="$processingmodule" exact="null" />
+        <set_value name="$reservedProcsCount" exact="0" />
+        <do_for_each in="$listProcessors">
+            <do_if value="not loop.element.isoperational">
+                <!-- Skip non-operational processors -->
+                <continue />
+            </do_if>
+            <set_value name="$processingmodule" exact="loop.element" comment="Either this is the real target, or this is a blocking target for the game to wait and retry." />
+            <do_if value="@global.$v1024_procReservationTable.{$processingmodule}">
+                <!-- Skip reserved processors -->
+                <set_value name="$reservedProcsCount" exact="$reservedProcsCount + 1" />
+                <continue />
+            </do_if>
+            <!-- Select and reserve it! -->
+            <!-- No real need to reserve it for too long; either someone is closer than you (they will enter first), or they will already be redirected by this mod to somewhere else. -->
+            <set_value name="global.$v1024_procReservationTable.{$processingmodule}" exact="5" />
+            <break />
+        </do_for_each>
+        <do_if value="this.ship.isplayerowned">
+            <show_help position="1" duration="3s" custom="'%s selecting a processor %s; while looping, %s is currently reserved'.[this.ship.idcode, $processingmodule, $reservedProcsCount]" chance="0"/>
+        </do_if>
+        <remove_value name="$listProcessors" />
+        <remove_value name="$reservedProcsCount" />
+    </replace>
+
+    <!-- Cancel the reservation when you finish -->
+    <add sel="/aiscript/attention/actions/label[@name='finish']" pos="after">
+        <do_if value="$processingmodule != null">
+            <show_help position="1" duration="3s" custom="'%s cancelling reservation %s: cycle finished'.[this.ship.idcode, $processingmodule]" chance="0" />
+            <remove_value name="@global.$v1024_procReservationTable.{$processingmodule}" />
+        </do_if>
+    </add>
+
+    <!-- Also, cancel the reservation when you abort (e.g. running from the Tide) -->
+    <add sel="/aiscript/on_abort">
+        <do_if value="$processingmodule != null">
+            <show_help position="1" duration="3s" custom="'%s cancelling reservation %s: aborted'.[this.ship.idcode, $processingmodule]" chance="0" />
+            <remove_value name="@global.$v1024_procReservationTable.{$processingmodule}" />
+        </do_if>
+    </add>
+</diff>

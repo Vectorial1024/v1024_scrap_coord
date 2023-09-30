@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mdscript name="V1024_ScrapDeliveryCoordination" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
+    <cues>
+        <!-- Sets up the global processor avoidance lookup table -->
+        <cue name="SDC_SettingUp" instantiate="true">
+            <conditions>
+                <event_cue_signalled cue="md.Setup.Start" />
+            </conditions>
+            <actions>
+                <!-- It turns out, component IDs are reassigned when a save-load happens, so there is no real reason to persist the reservation table. -->
+                <show_help position="1" duration="6s" custom="'V1024 Scrap Delivery Coordination: starting up.'" chance="0"/>
+                <set_value name="global.$v1024_procReservationTable" exact="table[]" />
+            </actions>
+        </cue>
+        <cue name="SDC_TheLoop" checkinterval="1min" instantiate="true">
+            <actions>
+                <show_help position="1" duration="3s" custom="'V1024 SDC: Pulse %s'.[global.$v1024_procReservationTable]" />
+                <!-- The setup cue always run before this update cue -->
+                <!-- Decrement the reservation counters and clean things up -->
+                <do_for_each name="$pendingProcessor" in="global.$v1024_procReservationTable" reverse="true">
+                    <set_value name="$minuteCountdown" exact="@global.$v1024_procReservationTable.{$pendingProcessor}" />
+                    <show_help position="1" duration="1s" custom="'Loop %s %s %s'.[$pendingProcessor, $minuteCountdown, $minuteCountdown le 0]" chance="0" />
+                    <do_if value="$minuteCountdown le 0">
+                        <remove_value name="global.$v1024_procReservationTable.{$pendingProcessor}" />
+                        <continue />
+                    </do_if>
+                    <set_value name="global.$v1024_procReservationTable.{$pendingProcessor}" exact="$minuteCountdown - 1" />
+                </do_for_each>
+                <cancel_cue cue="this" />
+            </actions>
+        </cue>
+    </cues>
+</mdscript>
