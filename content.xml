@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<content name="V1024 - Scrap Delivery Coordination" author="Vectorial1024" version="001" save="0" description="When delivering scrap, Manticores spread out to use all processors if possible.">
-    <!-- "Extra" language entries as implicitly required by X4. This is quite different from what I've seen in XR. -->
+<content name="V1024 - Scrap Delivery Coordination" author="Vectorial1024" version="100" save="0" description="When delivering scrap, Manticores spread out to use all processors if possible.">
     <text language="7" name="V1024 - Scrap Delivery Coordination" description="When delivering scrap, Manticores spread out to use all processors if possible." author="Vectorial1024"/>
     <text language="33" name="V1024 - Scrap Delivery Coordination" description="When delivering scrap, Manticores spread out to use all processors if possible." author="Vectorial1024"/>
     <text language="34" name="V1024 - Scrap Delivery Coordination" description="When delivering scrap, Manticores spread out to use all processors if possible." author="Vectorial1024"/>
