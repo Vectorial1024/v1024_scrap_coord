@@ -1,7 +1,8 @@
 # Scrap Delivery Coordination
 When delivering scrap, Manticores spread out to use all processors if possible.
 
-(links etc)
+- Nexus Mods: https://www.nexusmods.com/x4foundations/mods/1234
+- Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3044228579
 
 ## Quick info
 This mod is directly inspired by [Multi Scrap Processor Station Fix](https://www.nexusmods.com/x4foundations/mods/882). At one point, I was a user of that mod, but then I still notice some scrap processors running empty when there are multiple Manticores with scrap waiting nearby.
