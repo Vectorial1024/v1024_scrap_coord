@@ -36,16 +36,16 @@
 
     <!-- Cancel the reservation when you finish -->
     <add sel="/aiscript/attention/actions/label[@name='finish']" pos="after">
-        <do_if value="$processingmodule != null">
             <show_help position="1" duration="3s" custom="'%s cancelling reservation %s: cycle finished'.[this.ship.idcode, $processingmodule]" chance="0" />
+        <do_if value="$processingmodule?" comment="$processingmodule will be undef if loading from save; 'undef != null' will cause undef error">
             <remove_value name="global.$v1024_procReservationTable.{$processingmodule}" />
         </do_if>
     </add>
 
     <!-- Also, cancel the reservation when you abort (e.g. running from the Tide) -->
     <add sel="/aiscript/on_abort">
-        <do_if value="$processingmodule != null">
             <show_help position="1" duration="3s" custom="'%s cancelling reservation %s: aborted'.[this.ship.idcode, $processingmodule]" chance="0" />
+        <do_if value="$processingmodule?" comment="$processingmodule will be undef if loading from save; 'undef != null' will cause undef error">
             <remove_value name="global.$v1024_procReservationTable.{$processingmodule}" />
         </do_if>
     </add>
