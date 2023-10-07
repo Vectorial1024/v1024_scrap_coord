@@ -34,11 +34,23 @@
         <remove_value name="$reservedProcsCount" />
     </replace>
 
-    <!-- Cancel the reservation when you finish -->
+    <!-- Cancel the reservation when you finish ONLY IF you finish with problems -->
+    <!--
+        While there is no "recipe" for processing raw scrap, the game currently processes raw scrap to scrap metal at a rate of 150 per cycle, and 1 cycle per minute.
+        The idea is that, since the average M wreck is around 450 raw scrap (i.e. 3 minutes) and the scrap cube is at 1000 raw scrap (i.e., 7 minutes),
+        the processor will be busy for a few minutes after successful delivery.
+        Manticores should try other scrap processors in this time period.
+    -->
+    <add sel="/aiscript/attention/actions/label[@name='finish']" pos="before">
+        <set_value name="$deliverySuccess" exact="true" />
+    </add>
     <add sel="/aiscript/attention/actions/label[@name='finish']" pos="after">
-        <do_if value="$processingmodule?" comment="$processingmodule will be undef if loading from save; 'undef != null' will cause undef error">
-            <show_help position="1" duration="3s" custom="'%s cancelling reservation %s: cycle finished'.[this.ship.idcode, $processingmodule]" chance="0" />
+        <do_if value="not $deliverySuccess? and $processingmodule?" comment="$processingmodule will be undef if loading from save; 'undef != null' will cause undef error">
+            <show_help position="1" duration="3s" custom="'%s cancelling reservation %s: finished with problems'.[this.ship.idcode, $processingmodule]" chance="0" />
             <remove_value name="global.$v1024_procReservationTable.{$processingmodule}" />
+        </do_if>
+        <do_if value="$deliverySuccess?" comment="Remove the flag if set">
+            <remove_value name="$deliverySuccess" />
         </do_if>
     </add>
 
