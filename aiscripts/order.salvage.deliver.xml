@@ -38,7 +38,7 @@
     <add sel="/aiscript/attention/actions/label[@name='finish']" pos="after">
         <do_if value="$processingmodule != null">
             <show_help position="1" duration="3s" custom="'%s cancelling reservation %s: cycle finished'.[this.ship.idcode, $processingmodule]" chance="0" />
-            <remove_value name="@global.$v1024_procReservationTable.{$processingmodule}" />
+            <remove_value name="global.$v1024_procReservationTable.{$processingmodule}" />
         </do_if>
     </add>
 
@@ -46,7 +46,7 @@
     <add sel="/aiscript/on_abort">
         <do_if value="$processingmodule != null">
             <show_help position="1" duration="3s" custom="'%s cancelling reservation %s: aborted'.[this.ship.idcode, $processingmodule]" chance="0" />
-            <remove_value name="@global.$v1024_procReservationTable.{$processingmodule}" />
+            <remove_value name="global.$v1024_procReservationTable.{$processingmodule}" />
         </do_if>
     </add>
 </diff>
