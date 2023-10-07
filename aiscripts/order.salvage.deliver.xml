@@ -65,7 +65,7 @@
     <!-- Also, cancel the reservation when there is a general error (e.g. the tow ship is somehow too far away to make the delivery) -->
     <add sel="/aiscript/attention/actions/do_else" pos="prepend">
         <do_if value="$processingmodule?" comment="$processingmodule will be undef if loading from save; 'undef != null' will cause undef error">
-            <show_help position="1" duration="3s" custom="'%s cancelling reservation %s: general delivery failure'.[this.ship.idcode, $processingmodule]" chance="100" />
+            <show_help position="1" duration="3s" custom="'%s cancelling reservation %s: general delivery failure'.[this.ship.idcode, $processingmodule]" chance="0" />
             <remove_value name="global.$v1024_procReservationTable.{$processingmodule}" />
         </do_if>
     </add>
