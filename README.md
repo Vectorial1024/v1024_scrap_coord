@@ -28,6 +28,7 @@ Scrap delivery got improved in the 7.0 free update, and I decided to take a look
 Basically, post-7.0 vanilla scrap processing flow looks like this:
 1. Pick up scrap cube (or sth)
 2. Move into the zone of the destination
+
 Then, it gets complicated:
 - The station manager oversees the entire process
 - Find any available processor, and ask the manager to reserve it
